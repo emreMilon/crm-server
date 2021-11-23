@@ -13,7 +13,7 @@ const UserModel = sequelize.define(
     "User", // model
     { // attribute
         userId : {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
         },
