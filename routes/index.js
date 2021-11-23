@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var { register } = require("../controllers/authctrl");
+var { register, activeAccount } = require("../controllers/authctrl");
 var {validRegister} = require("../middleware/valid")
 
 router.get("/", function (req, res) {
@@ -9,5 +9,6 @@ router.get("/", function (req, res) {
 
 //Auth Routes
 router.post("/register", validRegister, register);
+router.post("/active", activeAccount );
 
 module.exports = router;
