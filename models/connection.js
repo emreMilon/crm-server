@@ -1,12 +1,11 @@
 const {Sequelize, DataTypes} = require("sequelize")
-
+require("dotenv").config()
 const name = process.env.DATABASE_NAME;
 const user = process.env.DATABASE_USERNAME;
 const password = process.env.DATABASE_PASSWORD;
 
  const sequelize = new Sequelize(
     name, user, password, {host: "127.0.0.1", dialect: "mysql", operatorsAliases: false}
-    //'CRM', 'root', 'Dsvgh6083..', {host: "127.0.0.1", dialect: "mysql", operatorsAliases: false}
 );
 sequelize
 .authenticate()

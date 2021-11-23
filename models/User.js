@@ -1,10 +1,18 @@
-const { DataTypes } = require("sequelize")
-require("./connection.js")
+const {Sequelize, DataTypes} = require("sequelize")
+require("dotenv").config()
+
+const name = process.env.DATABASE_NAME;
+const user = process.env.DATABASE_USERNAME;
+const password = process.env.DATABASE_PASSWORD;
+
+ const sequelize = new Sequelize(
+    process.env.DATABASE_NAME, process.env.DATABASE_USERNAME, process.env.DATABASE_PASSWORD, {host: "127.0.0.1", dialect: "mysql", operatorsAliases: false}
+);
 
 const UserModel = sequelize.define(
     "User", // model
     { // attribute
-        userId = {
+        userId : {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,

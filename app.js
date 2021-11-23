@@ -1,21 +1,23 @@
 var express = require("express")
 var cors = require("cors")
+var cookieParser = require("cookie-parser")
 const logger = require("morgan")
-var indexRouter = require("./routes/index");
+var routes = require("./routes/index");
+require("dotenv").config()
 
 
 const port = process.env.port || 5000;
 
-require("dotenv").config()
 
 var app = express();
 
-app.use(cors());
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(logger("dev"));
+app.use(cookieParser())
 
-app.use("/api", indexRouter);
+app.use("/api", routes);
 
 
 app.listen(port, () => {
