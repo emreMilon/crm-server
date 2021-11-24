@@ -1,7 +1,7 @@
 const UserModel = require("../models/User");
 var bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-const { generateActiveToken } = require("../config/generetaToken");
+const { generateActiveToken, generateAccessToken, generateRefreshToken } = require("../config/generetaToken");
 require("dotenv").config();
 const activeToken = process.env.ACTIVE_TOKEN_SECRET;
 
@@ -56,3 +56,40 @@ exports.activeAccount = async (req, res) => {
     return res.status(500).json({ msg: error.message });
   }
 };
+
+exports.login = async ( req, res ) => {
+  try {
+    const {email, password} = req.body;
+
+    const user = await UserModel.findOne({where: {email: req.body.email}})
+    if (!user) return res.status(400).json({msg: "This account does not exist"})
+
+    // if user exists
+
+    loginUser(user, password, res)
+
+    
+  } catch (error) {
+    return res.status(500).json({msg: error.message})
+  }
+}
+
+const loginUser =  async (user, password, res) => {
+  const isMatch = await bcrypt.compare(password, user.password );
+  if (!isMatch) return res.status(500).json({msg: "Password is  incorrect!"})
+
+  const access_token = generateAccessToken({id: user.userId})
+  const refresh_token = generateRefreshToken({id: user.userId})
+
+  res.cookie('refreshtoken', refresh_token, {
+    httpOnly: true,
+    path: '/api/refresh_token',
+    maxAge: 30*24*60*60*1000 // 30 days
+  })
+
+  res.json({
+    msg: "Login Success!",
+    access_token,
+    user
+  })
+}
