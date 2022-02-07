@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+
+  mysql_db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=process.env.DATABASE_PASSWORD
+      - MYSQL_DATABASE=CRM
+      - MYSQL_USER=emre
+      - MYSQL_PASSWORD=process.env.DATABASE_PASSWORD
+    restart: always
+    volumes:
+      - mysql-data
+    networks:
+      - pern-app
+
+  api-server:
+    build:
+      dockerfile: Dockerfile
+      context: ./crmServer
+    ports:
+      - "8000:8000"
+    networks:
+      - pern-app
+    depends_on:
+      - mysql_db
+    volumes:
+      - mysql-data
+      - 'usr/src/app/node_modules'
+
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - mysql-data
+      - 'usr/src/app/node_modules'
+    networks:
+      - pern-app
+  
+  
+
+networks:
+  pern-app:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
