@@ -5,7 +5,7 @@ const logger = require("morgan");
 var routes = require("./routes/index");
 require("dotenv").config();
 
-const port = process.env.port || 5000;
+const port = process.env.port || 8000;
 
 var app = express();
 

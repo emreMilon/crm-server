@@ -109,10 +109,11 @@ exports.refreshToken = async (req, res) => {
     const access_token = generateAccessToken({ id: user.userId })
     res.json({
       user,
-      access_token
+      access_token,
+      msg: "Successfully created"
     })
 
-    res.json({ msg: "Success!" })
+    
   } catch (error) {
     return res.status(500).json({ msg: error.message })
   }
